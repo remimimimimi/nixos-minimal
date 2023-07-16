@@ -37,7 +37,12 @@
             ./configuration.nix
           ];
         };
-        packages.default = let cfg = self.nixosConfigurations.${system}.minimal.config; in cfg.system.build.vm;
+        packages = let
+          cfg = self.nixosConfigurations.${system}.minimal.config;
+        in {
+          ${cfg.formatAttr} = cfg.system.build.${cfg.formatAttr};
+          vm = cfg.system.build.vm;
+        };
       }))
     ];
 }
