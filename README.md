@@ -1,2 +1,3 @@
 # nixos-minimal
-The most minimal configuration for NixOS
+
+The most minimal configuration for NixOS.
