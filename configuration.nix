@@ -108,15 +108,12 @@
   systemd.oomd.enable = false;
   services.nscd.enable = false;
 
+  services.dbus.enable = lib.mkForce false;
+
   # Disable systemd-logind
   # NOTE: modules/system/boot/systemd/logind.nix
-  # environment.etc."systemd/logind.conf".enable = false;
-  # systemd.services.systemd-logind.enable = false;
-  # systemd.services."autovt@".enable = false;
-  # systemd.services.systemd-user-sessions.enable = false;
-  systemd.services.dbus.enable = false;
-  # systemd.services."user@".enable = false;
-  # systemd.services."user-runtime-dir@".enable = false;
+  environment.etc."systemd/logind.conf".enable = false;
+  systemd.services.systemd-logind.enable = false;
 
   system.nssModules = lib.mkForce [];
   security.pam.services.su.forwardXAuth = lib.mkForce false;
@@ -127,7 +124,8 @@
   boot.initrd.kernelModules = ["ext4"];
   # boot.initrd.enable = false;
 
-  # Requires patch to make-disk-image. It should use tools from pkgs.nixos-install-tools instead of system.build.{nixos-install,nixos-enter}
+  # Requires patch to make-disk-image if you want to buile raw-efi image.
+  # It should use tools from pkgs.nixos-install-tools instead of system.build.{nixos-install,nixos-enter}
   nix.enable = false;
 
   boot.enableContainers = false;
