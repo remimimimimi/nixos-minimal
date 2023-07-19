@@ -6,7 +6,8 @@
 }: {
   imports = [
     (modulesPath + "/profiles/minimal.nix")
-    (modulesPath + "/profiles/headless.nix")
+    # Uncomment this if you want to disable getty
+    # (modulesPath + "/profiles/headless.nix")
   ];
 
   nixpkgs.overlays = [
@@ -80,7 +81,15 @@
   boot.enableContainers = false;
 
   environment.defaultPackages = lib.mkForce [];
-  environment.systemPackages = lib.mkForce [];
+  environment.systemPackages = lib.mkForce [pkgs.bash]; # Required for user login
+
+  users.users.demo =
+    { isNormalUser = true;
+      description = "Demo user account";
+      extraGroups = [ "wheel" ];
+      password = "demo";
+      uid = 1000;
+    };
 
   environment.etc = {
     "nanorc".enable = false;
