@@ -33,15 +33,24 @@
             (_: {
               system.stateVersion = "23.05";
             })
-            nixos-generators.nixosModules.iso
             ./configuration.nix
           ];
         };
         packages = let
-          cfg = self.nixosConfigurations.${system}.minimal.config;
+          nixosConfiguration = self.nixosConfigurations.${system}.minimal;
+          isoConfiguration = nixosConfiguration.extendModules {
+            modules = [
+              nixos-generators.nixosModules.iso
+            ];
+          };
+          vmConfiguration = nixosConfiguration.extendModules {
+            modules = [
+              nixos-generators.nixosModules.vm
+            ];
+          };
         in {
-          ${cfg.formatAttr} = cfg.system.build.${cfg.formatAttr};
-          vm = cfg.system.build.vm;
+          iso = isoConfiguration.config.system.build.${isoConfiguration.config.formatAttr};
+          vm = vmConfiguration.config.system.build.${vmConfiguration.config.formatAttr};
         };
       }))
     ];
